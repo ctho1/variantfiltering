@@ -36,14 +36,16 @@ for(i in 1:length(input[,1])){
   input$Sample[i]<-sample_names[sample_names$Humangenetik%in%input$Sample[i],2]
 }
 
-# Add CancerVar Annotation
-
+# Prepare Appreci8 Calls for Cancervar annotation
 # CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 df<-data.frame(CHROM=input$Chr,POS=input$Pos,ID=input$Sample,
                REF=input$Ref,ALT=input$Alt,QUAL=".",
                FILTER=".",INFO=input$Sample)
-write.table(df,file="./appreci8/filtered_variants_export.vcf",
+write.table(df,file="./appreci8/appreci8_variants_export.vcf",
             quote=FALSE,sep="\t",row.names=F,col.names=F)
+# appreci8_variants_export.vcf is ready to be annotated with CancerVar using the following command:
+# python path/to/CancerVar/CancerVar.py -b hg19 -i ./appreci8_variants_export.vcf --input_type=VCF -o ./output
+# This command produces the output output.hg19_multianno.txt.cancervar
 
 # Read CancerVar Output
 cancervar<-read.delim("./appreci8/output.hg19_multianno.txt.cancervar",
